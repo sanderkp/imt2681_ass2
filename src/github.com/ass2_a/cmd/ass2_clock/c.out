@@ -1,0 +1,21 @@
+mode: set
+github.com\ass2\cmd\ass2_clock\main.go:13.26,17.32 4 1
+github.com\ass2\cmd\ass2_clock\main.go:47.2,49.17 3 0
+github.com\ass2\cmd\ass2_clock\main.go:74.2,74.56 1 0
+github.com\ass2\cmd\ass2_clock\main.go:17.32,19.17 2 1
+github.com\ass2\cmd\ass2_clock\main.go:19.17,23.18 4 1
+github.com\ass2\cmd\ass2_clock\main.go:28.4,29.18 2 1
+github.com\ass2\cmd\ass2_clock\main.go:33.4,36.26 4 1
+github.com\ass2\cmd\ass2_clock\main.go:23.18,26.5 2 0
+github.com\ass2\cmd\ass2_clock\main.go:29.18,32.5 2 0
+github.com\ass2\cmd\ass2_clock\main.go:36.26,39.5 2 0
+github.com\ass2\cmd\ass2_clock\main.go:39.5,42.5 2 1
+github.com\ass2\cmd\ass2_clock\main.go:49.17,52.17 3 0
+github.com\ass2\cmd\ass2_clock\main.go:56.3,59.17 4 0
+github.com\ass2\cmd\ass2_clock\main.go:63.3,65.17 3 0
+github.com\ass2\cmd\ass2_clock\main.go:69.3,69.67 1 0
+github.com\ass2\cmd\ass2_clock\main.go:52.17,55.4 2 0
+github.com\ass2\cmd\ass2_clock\main.go:59.17,62.4 2 0
+github.com\ass2\cmd\ass2_clock\main.go:65.17,68.4 2 0
+github.com\ass2\cmd\ass2_clock\main.go:77.13,79.6 2 0
+github.com\ass2\cmd\ass2_clock\main.go:79.6,83.3 3 0
