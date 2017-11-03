@@ -14,7 +14,7 @@ func Test_AccessAndDelete(t *testing.T) {
 	ts2 := httptest.NewServer(http.HandlerFunc(AccessWebhooksHandler))
 	defer ts1.Close()
 	defer ts2.Close()
-	s := Webhook{"", "testing","EUR","NOK",float64(9.6),float64(6.9)}
+	s := Webhook{"", "testing", "EUR", "NOK", float64(9.6), float64(6.9)}
 	jsonBlob, err := json.Marshal(s)
 	resp, err := http.Post(ts1.URL, "application/json", bytes.NewBuffer(jsonBlob))
 	if err != nil {
@@ -25,7 +25,7 @@ func Test_AccessAndDelete(t *testing.T) {
 		t.Errorf("Error doing ioutil.ReadAll(): %s", err)
 	}
 	fmt.Println("ID is: " + string(id))
-	
+
 	resp, err = http.Get(ts2.URL + "/" + string(id))
 	if err != nil {
 		t.Errorf("Error doing http.Get(): %s", err)
@@ -34,8 +34,8 @@ func Test_AccessAndDelete(t *testing.T) {
 	s2 := Webhook{}
 	json.Unmarshal(data, &s2)
 	fmt.Println(s2)
-	
-	req, err := http.NewRequest(http.MethodDelete, ts2.URL + "/" + string(id), nil)
+
+	req, err := http.NewRequest(http.MethodDelete, ts2.URL+"/"+string(id), nil)
 	client := &http.Client{}
 	client.Do(req)
 }

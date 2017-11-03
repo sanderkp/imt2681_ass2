@@ -25,7 +25,7 @@ func getLatestCurrency() {
 			} else {
 				fmt.Println("Got currency data! Now inserting into db")
 				fmt.Println("Creating index")
-				index := mgo.Index{Key: []string{"date"},Unique: true, DropDups: false, Background: false, Sparse: false}
+				index := mgo.Index{Key: []string{"date"}, Unique: true, DropDups: false, Background: false, Sparse: false}
 				fmt.Println(index)
 				fmt.Println("Ensuring index")
 				err = c.EnsureIndex(index)

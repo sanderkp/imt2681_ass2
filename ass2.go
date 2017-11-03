@@ -14,10 +14,13 @@ import "strconv"
 
 //URL ...
 const URL = "mongodb://admin:admin@ds119685.mlab.com:19685/imt2681_ass2"
+
 //Db ...
 const Db = "imt2681_ass2"
+
 //WebhookCollection ...
 const WebhookCollection = "webhook"
+
 //CurrencyCollection ...
 const CurrencyCollection = "currency"
 
@@ -26,24 +29,25 @@ const CurrencyCollection = "currency"
 
 //Webhook ...
 type Webhook struct {
-	ID bson.ObjectId `json:"-" bson:"_id,omitempty"`
-	WebhookURL string `json:"webhookURL"`
-	BaseCurrency string `json:"baseCurrency"`
-	TargetCurrency string `json:"targetCurrency"`
-	MinTriggerValue float64 `json:"minTriggerValue"`
-	MaxTriggerValue float64 `json:"maxTriggerValue"`
+	ID              bson.ObjectId `json:"-" bson:"_id,omitempty"`
+	WebhookURL      string        `json:"webhookURL"`
+	BaseCurrency    string        `json:"baseCurrency"`
+	TargetCurrency  string        `json:"targetCurrency"`
+	MinTriggerValue float64       `json:"minTriggerValue"`
+	MaxTriggerValue float64       `json:"maxTriggerValue"`
 }
+
 //Currency ...
 type Currency struct {
-	Base string `json:"base"`
-	Date string `json:"date"`
+	Base  string                 `json:"base"`
+	Date  string                 `json:"date"`
 	Rates map[string]interface{} `json:"rates"`
 }
 
 //DbConnect ...
-func DbConnect(url string, db string, col string) (*mgo.Session, *mgo.Collection){
+func DbConnect(url string, db string, col string) (*mgo.Session, *mgo.Collection) {
 	s := strings.Split(url, "/")
-	dbName := s[len(s) - 1]
+	dbName := s[len(s)-1]
 	fmt.Print("Connecting to DB: " + dbName + "\n")
 	session, err := mgo.Dial(url)
 	if err != nil {
@@ -54,6 +58,7 @@ func DbConnect(url string, db string, col string) (*mgo.Session, *mgo.Collection
 	c := session.DB(db).C(col)
 	return session, c
 }
+
 //DbGetCount ...
 func DbGetCount(c *mgo.Collection) int {
 	count, err := c.Count()
@@ -63,6 +68,7 @@ func DbGetCount(c *mgo.Collection) int {
 	}
 	return count
 }
+
 //GetCurrencyRate ...
 func GetCurrencyRate(curry Currency, s Webhook) float64 {
 	var res float64
@@ -73,12 +79,13 @@ func GetCurrencyRate(curry Currency, s Webhook) float64 {
 			fmt.Println("Type Assertion Error, target or base currency is not of type float")
 			return res
 		}
-		res =  targ / base
+		res = targ / base
 	} else {
 		fmt.Printf("ERROR, Target or BaseCurrency was not found in rates, TargetCurrency: '%s' BaseCurrency: '%s'\n", s.TargetCurrency, s.BaseCurrency)
 	}
 	return res
 }
+
 //DoInvokeWebhook ...
 func DoInvokeWebhook(currentRate float64, s Webhook) {
 	m := make(map[string]interface{})
@@ -104,6 +111,7 @@ func DoInvokeWebhook(currentRate float64, s Webhook) {
 	}
 	fmt.Printf("Response: StatusCode: %d %s\n", resp.StatusCode, body)
 }
+
 //InvokeWebhook ...
 func InvokeWebhook(currentRate float64, s Webhook) {
 	fmt.Println("Invoking trigger: " + s.WebhookURL)
@@ -113,6 +121,7 @@ func InvokeWebhook(currentRate float64, s Webhook) {
 		fmt.Println("The webhook was not notified because the current rate is not outside the min/max trigger values")
 	}
 }
+
 //TriggerWebhooks ...
 func TriggerWebhooks(f func(float64, Webhook)) error {
 	fmt.Println("Invoking triggers")
@@ -142,6 +151,7 @@ func TriggerWebhooks(f func(float64, Webhook)) error {
 	}
 	return nil
 }
+
 //ReadHTTPBody ...
 func ReadHTTPBody(r io.ReadCloser) []byte {
 	body, err := ioutil.ReadAll(r)
@@ -151,6 +161,7 @@ func ReadHTTPBody(r io.ReadCloser) []byte {
 	}
 	return body
 }
+
 //ReadEntirePage ...
 func ReadEntirePage(url string) []byte {
 	resp, err := http.Get(url)
@@ -161,6 +172,7 @@ func ReadEntirePage(url string) []byte {
 	defer resp.Body.Close()
 	return ReadHTTPBody(resp.Body)
 }
+
 //GetInitialDate ...
 func GetInitialDate() time.Time {
 	fmt.Print("Connecting to DB\n")
@@ -185,7 +197,7 @@ func GetInitialDate() time.Time {
 					if err != nil {
 						fmt.Printf("Query Error: %s", err)
 					} else {
-						newTime,err := time.Parse("2006-01-02", curry.Date)
+						newTime, err := time.Parse("2006-01-02", curry.Date)
 						if err != nil {
 							fmt.Printf("Time Error: %s\n", err)
 						}
@@ -201,6 +213,7 @@ func GetInitialDate() time.Time {
 	}
 	return latestCurrencyTime
 }
+
 //RegisterWebhookHandler ...
 func RegisterWebhookHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
@@ -223,7 +236,7 @@ func RegisterWebhookHandler(w http.ResponseWriter, r *http.Request) {
 			if session != nil && c != nil {
 				defer session.Close()
 				fmt.Print("Ensuring index\n")
-				err = c.EnsureIndex(mgo.Index{Key: []string{"webhookurl", "basecurrency", "targetcurrency"},Unique: true,DropDups: false,Background: false,Sparse: false})
+				err = c.EnsureIndex(mgo.Index{Key: []string{"webhookurl", "basecurrency", "targetcurrency"}, Unique: true, DropDups: false, Background: false, Sparse: false})
 				if err != nil {
 					fmt.Printf("DB Error: %s\n", err)
 					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -253,10 +266,11 @@ func RegisterWebhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 //AccessWebhooksHandler ...
 func AccessWebhooksHandler(w http.ResponseWriter, r *http.Request) {
 	s := strings.Split(r.URL.Path, "/")
-	id := s[len(s) - 1]
+	id := s[len(s)-1]
 	session, c := DbConnect(URL, Db, WebhookCollection)
 	if r.Method == http.MethodGet {
 		if session != nil && c != nil {
@@ -264,7 +278,7 @@ func AccessWebhooksHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Accessing registered webhook")
 			res := Webhook{}
 			if bson.IsObjectIdHex(id) {
-				err := c.Find(bson.M{"_id":bson.ObjectIdHex(id)}).One(&res)
+				err := c.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&res)
 				if err != nil {
 					fmt.Printf("DB Error: %s\n", err)
 					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -274,7 +288,7 @@ func AccessWebhooksHandler(w http.ResponseWriter, r *http.Request) {
 				json.NewEncoder(w).Encode(res)
 			} else {
 				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-					return
+				return
 			}
 		}
 	} else if r.Method == http.MethodDelete {
@@ -292,6 +306,7 @@ func AccessWebhooksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 //LatestCurrencyHandler ...
 func LatestCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
@@ -314,12 +329,12 @@ func LatestCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 				//https://stackoverflow.com/questions/38127583/get-last-inserted-element-from-mongodb-in-golang
 				count := DbGetCount(c)
 				if count == 0 {
-					fmt.Println("DB Warning: Database is empty");
+					fmt.Println("DB Warning: Database is empty")
 					return
 				}
 				var exchange float64
 				if count > 0 {
-					err = c.Find(nil).Skip(count-1).One(&curry)
+					err = c.Find(nil).Skip(count - 1).One(&curry)
 					if err != nil {
 						fmt.Printf("DB Error: %s", err)
 						http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -340,6 +355,7 @@ func LatestCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 //AverageCurrecyHandler ...
 func AverageCurrecyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
@@ -378,6 +394,7 @@ func AverageCurrecyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 //EvalTriggerHandler ...
 func EvalTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
