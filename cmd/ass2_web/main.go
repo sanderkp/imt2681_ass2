@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 import "net/http"
-import "time"
 import "os"
 import "github.com/sanderkp/imt2681_ass2"
 
