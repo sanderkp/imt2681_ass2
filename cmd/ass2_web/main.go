@@ -4,7 +4,7 @@ import "fmt"
 import "net/http"
 import "time"
 import "os"
-import "ass2"
+import "ass2Shared"
 
 func main() {
 	port := os.Getenv("PORT")
