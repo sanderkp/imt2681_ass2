@@ -1,4 +1,4 @@
-package ass2Shared
+package ass2
 
 import "fmt"
 import "testing"
