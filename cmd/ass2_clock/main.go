@@ -4,7 +4,7 @@ import "fmt"
 import "encoding/json"
 import "gopkg.in/mgo.v2"
 import "time"
-import "src/ass2"
+import "github.com/sanderkp/imt2681_ass2"
 
 //REMEMBER: FOR MARSHALING TO WORK MEMBER NAMES MUST START WITH CAPITAL LETTER
 //FUUUUUUU GOOOO@@@@@@@@@@@1!!!!!!!!!!!!!!!!!
