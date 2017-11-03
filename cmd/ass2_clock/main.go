@@ -4,7 +4,7 @@ import "fmt"
 import "encoding/json"
 import "gopkg.in/mgo.v2"
 import "time"
-import "ass2Shared"
+import "ass2"
 
 //REMEMBER: FOR MARSHALING TO WORK MEMBER NAMES MUST START WITH CAPITAL LETTER
 //FUUUUUUU GOOOO@@@@@@@@@@@1!!!!!!!!!!!!!!!!!
