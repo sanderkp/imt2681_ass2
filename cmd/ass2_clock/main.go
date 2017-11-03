@@ -11,14 +11,14 @@ import "github.com/sanderkp/imt2681_ass2"
 
 func getLatestCurrency() {
 	fmt.Println("Connecting to DB")
-	session, c := ass2Shared.DbConnect(ass2Shared.URL, ass2Shared.Db, ass2Shared.CurrencyCollection)
+	session, c := ass2.DbConnect(ass2.URL, ass2.Db, ass2.CurrencyCollection)
 	defer session.Close()
 	if session != nil && c != nil {
 		//Get currency data
 		fmt.Println("Getting latest currecy data")
-		body := ass2Shared.ReadEntirePage("http://api.fixer.io/latest")
+		body := ass2.ReadEntirePage("http://api.fixer.io/latest")
 		if body != nil {
-			curry := ass2Shared.Currency{}
+			curry := ass2.Currency{}
 			err := json.Unmarshal(body, &curry)
 			if err != nil {
 				fmt.Printf("JSON Error: %s\n", err)
@@ -53,7 +53,7 @@ func getLatestCurrency() {
 		}
 	}
 	//Check againts webhooks
-	ass2Shared.TriggerWebhooks(ass2Shared.InvokeWebhook)
+	ass2.TriggerWebhooks(ass2.InvokeWebhook)
 }
 
 func main() {
