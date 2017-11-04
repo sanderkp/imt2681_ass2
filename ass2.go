@@ -398,7 +398,7 @@ func AverageCurrecyHandler(w http.ResponseWriter, r *http.Request) {
 //EvalTriggerHandler ...
 func EvalTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		err := TriggerWebhooks(InvokeWebhook)
+		err := TriggerWebhooks(DoInvokeWebhook)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
