@@ -244,6 +244,7 @@ func RegisterWebhookHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				fmt.Print("Inserting webhook data\n")
 				s.ID = bson.NewObjectId()
+				fmt.Println(s)
 				err = c.Insert(s)
 				if err != nil {
 					fmt.Printf("DB Error: %s", err)
